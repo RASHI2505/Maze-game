@@ -7,8 +7,6 @@ canvas.height = 400;
 
 const c = canvas.getContext('2d');
 
-let radius = 20;
-
 // Object that checks if key is pressed
 let keyPressed = {
 	left: false,
@@ -33,15 +31,16 @@ const Goal = {
 }
 
 // Ball object
-function Ball(x, y, dx, dy){
+function Ball(x, y, radius, dx, dy){
 	this.x = x;
 	this.y = y;
+	this.radius = radius;
 	this.dx = dx;
 	this.dy = dy;
 
 	this.draw = function(){
 		c.beginPath();
-		c.arc(this.x, this.y, radius, 0, Math.PI * 2, false);
+		c.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
 		c.fillStyle = "red";
 		c.fill();
 		c.stroke();
@@ -95,35 +94,105 @@ function Wall(x, y, width, height){
 	}
 }
 
-// Create walls using the object
-let wall0 = new Wall(0, 100, canvas.width - 150, 5);
-let wall1 = new Wall(150, 200, canvas.width, 5);
-let wall2 = new Wall(150, 200, 5, 125);
-let wall3 = new Wall(250, canvas.height, 5, -125);
-let wall4 = new Wall(350, 200, 5, 125);
-let wall5 = new Wall(450, canvas.height, 5, -125);
-let wall6 = new Wall(550, 200, 5, 125);
-let wall7 = new Wall(650, canvas.height, 5, -125);
+
+// Create walls and save it in an array
+let wallArray = [
+new Wall(0, 100, canvas.width - 150, 5),
+new Wall(150, 200, canvas.width, 5),
+new Wall(150, 200, 5, 125),
+new Wall(250, canvas.height, 5, -125), // BUG
+new Wall(350, 200, 5, 125),
+new Wall(450, canvas.height, 5, -125), // BUG
+new Wall(550, 200, 5, 125),
+new Wall(650, canvas.height, 5, -125) // BUG
+];
 
 // Create the ball using the object 
-let ball = new Ball(30, 30, 7, 7);
+let ball = new Ball(30, 30, 20, 7, 7);
+
+/*
+// Check function if you touch walls
+function checkTouch(){
+
+	for(let i = 0; i < wallArray.lenght; i++){
+		let distX = Math.abs(ball.x - wallArray[i].x - wallArray[i].width / 2);
+	    let distY = Math.abs(ball.y - wallArray[i].y - wallArray[i].height / 2);
+
+		if (distX > (wallArray[i].width / 2 + ball.radius)) { return false; };
+    	if (distY > (wallArray[i].height / 2 + ball.radius)) { return false; };
+
+    	if (distX <= (wallArray[i].width / 2)) { return true; };
+    	if (distY <= (wallArray[i].height / 2)) { return true; };
+
+    	let dx = distX - wallArray[i].width / 2;
+    	let dy = distY - wallArray[i].height / 2;
+
+    	return (dx*dx+dy*dy<=(ball.radius * ball.radius));
+	}
+    
+}*/
+
+// Check function if ball touchs walls
+function RectCircleColliding(circle,rect){
+    let distX = Math.abs(circle.x - rect.x-rect.width/2);
+    let distY = Math.abs(circle.y - rect.y-rect.height/2);
+
+    if (distX > (rect.width/2 + circle.radius)) { return false; }
+    if (distY > (rect.height/2 + circle.radius)) { return false; }
+
+    if (distX <= (rect.width/2)) { return true; } 
+    if (distY <= (rect.height/2)) { return true; }
+
+    let dx=distX-rect.width/2;
+    let dy=distY-rect.height/2;
+    return (dx*dx+dy*dy<=(circle.radius*circle.radius));
+}
+
+function wallsCheck(){
+	if(RectCircleColliding(ball, wallArray[0])){
+		console.log(0);
+	}
+	if(RectCircleColliding(ball, wallArray[1])){
+		console.log(1);
+	}
+	if(RectCircleColliding(ball, wallArray[2])){
+		console.log(2);
+	}
+	if(RectCircleColliding(ball, wallArray[3])){
+		console.log(3);
+	}
+	if(RectCircleColliding(ball, wallArray[4])){
+		console.log(4);
+	}
+	if(RectCircleColliding(ball, wallArray[5])){
+		console.log(5);
+	}
+	if(RectCircleColliding(ball, wallArray[6])){
+		console.log(6);
+	}
+	if(RectCircleColliding(ball, wallArray[7])){
+		console.log(7);
+	}
+}
 
 function start(){
 	requestAnimationFrame(start);
 	c.clearRect(0, 0, innerWidth, innerHeight);
 
-	wall0.draw();
-	wall1.draw();
-	wall2.draw();
-	wall3.draw();
-	wall4.draw();
-	wall5.draw();
-	wall6.draw();
-	wall7.draw();
+
+	wallArray[0].draw();
+	wallArray[1].draw();
+	wallArray[2].draw();
+	wallArray[3].draw();
+	wallArray[4].draw();
+	wallArray[5].draw();
+	wallArray[6].draw();
+	wallArray[7].draw();
 
 	Goal.draw();
 
 	ball.move();
+	wallsCheck();
 }
 
 // Event that check if keys are pressed
