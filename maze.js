@@ -1,4 +1,3 @@
-
 // Make canvas statements
 const canvas = document.querySelector('canvas');
 
@@ -24,8 +23,9 @@ const Goal = {
 	draw: function(){
 		c.beginPath();
 		c.rect(this.x, this.y, this.width, this.height);
-		c.fillStyle = "orange";
+		c.fillStyle = "#13E864";
 		c.fill();
+		c.stroke();
 		c.closePath();
 	}
 }
@@ -41,7 +41,7 @@ function Ball(x, y, radius, dx, dy){
 	this.draw = function(){
 		c.beginPath();
 		c.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
-		c.fillStyle = "red";
+		c.fillStyle = "#FF225A";
 		c.fill();
 		c.stroke();
 		c.closePath();
@@ -100,37 +100,16 @@ let wallArray = [
 new Wall(0, 100, canvas.width - 150, 5),
 new Wall(150, 200, canvas.width, 5),
 new Wall(150, 200, 5, 125),
-new Wall(250, canvas.height, 5, -125), // BUG
+new Wall(250, canvas.height - 125, 5, 125),
 new Wall(350, 200, 5, 125),
-new Wall(450, canvas.height, 5, -125), // BUG
+new Wall(450, canvas.height - 125, 5, 125),
 new Wall(550, 200, 5, 125),
-new Wall(650, canvas.height, 5, -125) // BUG
+new Wall(650, canvas.height - 125, 5, 125)
 ];
 
 // Create the ball using the object 
 let ball = new Ball(30, 30, 20, 7, 7);
 
-/*
-// Check function if you touch walls
-function checkTouch(){
-
-	for(let i = 0; i < wallArray.lenght; i++){
-		let distX = Math.abs(ball.x - wallArray[i].x - wallArray[i].width / 2);
-	    let distY = Math.abs(ball.y - wallArray[i].y - wallArray[i].height / 2);
-
-		if (distX > (wallArray[i].width / 2 + ball.radius)) { return false; };
-    	if (distY > (wallArray[i].height / 2 + ball.radius)) { return false; };
-
-    	if (distX <= (wallArray[i].width / 2)) { return true; };
-    	if (distY <= (wallArray[i].height / 2)) { return true; };
-
-    	let dx = distX - wallArray[i].width / 2;
-    	let dy = distY - wallArray[i].height / 2;
-
-    	return (dx*dx+dy*dy<=(ball.radius * ball.radius));
-	}
-    
-}*/
 
 // Check function if ball touchs walls
 function RectCircleColliding(circle,rect){
@@ -150,28 +129,44 @@ function RectCircleColliding(circle,rect){
 
 function wallsCheck(){
 	if(RectCircleColliding(ball, wallArray[0])){
-		console.log(0);
+		alert("You lost. Try Again!");
+		document.location.reload();
 	}
 	if(RectCircleColliding(ball, wallArray[1])){
-		console.log(1);
+		alert("You lost. Try Again!");
+		document.location.reload();
 	}
 	if(RectCircleColliding(ball, wallArray[2])){
-		console.log(2);
+		alert("You lost. Try Again!");
+		document.location.reload();
 	}
 	if(RectCircleColliding(ball, wallArray[3])){
-		console.log(3);
+		alert("You lost. Try Again!");
+		document.location.reload();
 	}
 	if(RectCircleColliding(ball, wallArray[4])){
-		console.log(4);
+		alert("You lost. Try Again!");
+		document.location.reload();
 	}
 	if(RectCircleColliding(ball, wallArray[5])){
-		console.log(5);
+		alert("You lost. Try Again!");
+		document.location.reload();
 	}
 	if(RectCircleColliding(ball, wallArray[6])){
-		console.log(6);
+		alert("You lost. Try Again!");
+		document.location.reload();
 	}
 	if(RectCircleColliding(ball, wallArray[7])){
-		console.log(7);
+		alert("You lost. Try Again!");
+		document.location.reload();
+	}
+}
+
+// Check function if ball touchs goal square
+function goalCheck(){
+	if(RectCircleColliding(ball, Goal)){
+		alert("YOU WON!");
+		document.location.reload();
 	}
 }
 
@@ -193,6 +188,7 @@ function start(){
 
 	ball.move();
 	wallsCheck();
+	goalCheck();
 }
 
 // Event that check if keys are pressed
@@ -231,3 +227,24 @@ start();
 
 
 
+/*
+// Check function if you touch walls
+function checkTouch(){
+
+	for(let i = 0; i < wallArray.lenght; i++){
+		let distX = Math.abs(ball.x - wallArray[i].x - wallArray[i].width / 2);
+	    let distY = Math.abs(ball.y - wallArray[i].y - wallArray[i].height / 2);
+
+		if (distX > (wallArray[i].width / 2 + ball.radius)) { return false; };
+    	if (distY > (wallArray[i].height / 2 + ball.radius)) { return false; };
+
+    	if (distX <= (wallArray[i].width / 2)) { return true; };
+    	if (distY <= (wallArray[i].height / 2)) { return true; };
+
+    	let dx = distX - wallArray[i].width / 2;
+    	let dy = distY - wallArray[i].height / 2;
+
+    	return (dx*dx+dy*dy<=(ball.radius * ball.radius));
+	}
+    
+}*/
